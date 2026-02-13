@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUA | 나를 비워 미(美)를 채우다</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@100;300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f7f5;
+            --text-color: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { 
+            scroll-behavior: smooth; 
+            scroll-snap-type: y mandatory; /* 섹션별 스냅 효과 */
+        }
+
+        body { 
+            font-family: 'Nanum Myeongjo', serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        section, header { 
+            height: 100vh; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        /* 1. 히어로 섹션 (메인 영상 main.mp4) */
+        .hero { overflow: hidden; }
+        .video-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; /* 기기별 크기 자동 조절 */
+            z-index: -1;
+            filter: brightness(0.7);
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #fff;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        .logo { font-size: 4.5rem; letter-spacing: 1.5rem; font-weight: 300; margin-bottom: 20px; }
+        .slogan { font-family: 'Noto Sans KR', sans-serif; font-weight: 100; font-size: 1.1rem; letter-spacing: 0.4rem; }
+
+        /* 2. 가치관 섹션 */
+        .values { background: #fff; text-align: center; padding: 0 20px; }
+        .values h2 { font-size: 2.2rem; margin-bottom: 40px; font-weight: 400; letter-spacing: 0.2rem; }
+        .values p { max-width: 700px; line-height: 2.2; font-size: 1.05rem; color: #444; word-break: keep-all; }
+
+        /* 3. 향수 컬렉션 섹션 (가로 일렬 배치) */
+        .products { 
+            display: flex; 
+            flex-direction: row; 
+            justify-content: center; 
+            align-items: flex-start; 
+            gap: 20px; 
+            padding: 80px 40px; 
+            width: 100%;
+            background-color: var(--bg-color);
+            flex-wrap: nowrap; /* 일렬 유지 */
+        }
+        
+        .product-link { 
+            text-decoration: none; 
+            color: inherit; 
+            width: 23%; 
+        }
+
+        .product-card { 
+            width: 100%;
+            text-align: center; 
+            cursor: pointer; 
+            transition: transform 0.5s ease; 
+            background: #fff; 
+            padding: 20px;
+        }
+
+        .product-card:hover { transform: translateY(-10px); }
+        .product-card video { width: 100%; border-radius: 1px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 0.85rem; letter-spacing: 0.25rem; font-weight: 700; }
+
+        /* 4. 다운로드 섹션 (Mua.pdf) */
+        .download { background: #1a1a1a; color: #fff; gap: 30px; }
+        .btn-download {
+            padding: 15px 45px; border: 1px solid rgba(255,255,255,0.4);
+            color: #fff; text-decoration: none; font-size: 0.8rem; letter-spacing: 0.2rem;
+            transition: 0.3s;
+        }
+        .btn-download:hover { background: #fff; color: #1a1a1a; }
+
+        /* BGM 컨트롤러 */
+        #music-btn {
+            position: fixed; bottom: 40px; right: 40px;
+            width: 55px; height: 55px; border: 1px solid var(--text-color);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; z-index: 1000;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+        }
+        .music-off { opacity: 0.4; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 모바일 반응형 조절 */
+        @media (max-width: 768px) {
+            .products { flex-direction: column; align-items: center; height: auto; padding: 100px 0; }
+            .product-link { width: 85%; margin-bottom: 30px; }
+            .logo { font-size: 2.8rem; letter-spacing: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="assets/bgm.mp3" type="audio/mp3">
+    </audio>
+
+    <div id="music-btn" class="music-off" onclick="toggleMusic()">
+        <span id="status-icon">♪</span>
+    </div>
+
+    <header class="hero">
+        <video autoplay loop muted playsinline class="video-bg">
+            <source src="assets/main.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1 class="logo">MUA</h1>
+            <p class="slogan">Still, You Bloom </p>
+        </div>
+    </header>
+
+    <section class="values">
+        <h2>The Art of Emptiness</h2>
+        <p>
+            무아(無我)는 단순한 향을 넘어, 덜어냄으로써 본질에 닿는 명상적 시간을 제안합니다.<br>
+            사군자의 절제된 기품이 당신의 가장 순수한 내면에 스며듭니다.
+        </p>
+    </section>
+
+    <section class="products">
+        <a href="mae.html" class="product-link">
+            <div class="product-card">
+                <video loop muted playsinline onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="assets/mae.mp4" type="video/mp4">
+                </video>
+                <h3>MAE (매화)</h3>
+            </div>
+        </a>
+
+        <a href="nan.html" class="product-link">
+            <div class="product-card">
+                <video loop muted playsinline onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="assets/nan.mp4" type="video/mp4">
+                </video>
+                <h3>LAN (난초)</h3>
+            </div>
+        </a>
+
+        <a href="guk.html" class="product-link">
+            <div class="product-card">
+                <div class="product-card">
+                    <video loop muted playsinline onmouseover="this.play()" onmouseout="this.pause()">
+                        <source src="assets/gok.mp4" type="video/mp4">
+                    </video>
+                    <h3>GUK (국화)</h3>
+                </div>
+            </div>
+        </a>
+
+        <a href="juck.html" class="product-link">
+            <div class="product-card">
+                <video loop muted playsinline onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="assets/juck.mp4" type="video/mp4">
+                </video>
+                <h3>JUCK (대나무)</h3>
+            </div>
+        </a>
+    </section>
+
+    <section class="download">
+        <p>Experience the Essence of MUA</p>
+        <a href="assets/Mua.pdf" download class="btn-download">BRAND PPT DOWNLOAD</a>
+    </section>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        const btn = document.getElementById('music-btn');
+        const icon = document.getElementById('status-icon');
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btn.classList.remove('music-off');
+                icon.innerText = "♬";
+            } else {
+                audio.pause();
+                btn.classList.add('music-off');
+                icon.innerText = "♪";
+            }
+        }
+
+        document.body.addEventListener('click', () => {
+            console.log("Audio initialized");
+        }, { once: true });
+    </script>
+</body>
+</html>
